@@ -4,6 +4,7 @@
     "react-native/react-native": true
   },
   "plugins": ["react", "react-native"],
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "rules": {
     "prefer-const": "warn",
     "semi": ["error", "never"],
