@@ -4,12 +4,16 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "ios": "react-native run-ios",
+    "android": "react-native run-android",
+    "clean": "watchman watch-del-all && yarn start -- --reset-cache"
   },
   "dependencies": {
     "react": "16.5.0",
     "react-native": "0.57.0",
-    "react-navigation": "^2.14.2"
+    "react-navigation": "^2.14.2",
+    "react-navigation-material-bottom-tabs": "^0.4.0"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",

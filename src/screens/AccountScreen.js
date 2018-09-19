@@ -2,28 +2,20 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { View, Text, Button, StyleSheet } from 'react-native'
 
-class DetailsScreen extends Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: 'Settings',
-      drawerLabel: 'Settings',
-      headerRight: <Button onPress={navigation.toggleDrawer} title="Menu" />
-    }
-  }
-
+class AccountScreen extends Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired
   }
+
   render() {
     const { navigation } = this.props
     return (
       <View style={styles.container}>
-        <Text>Details</Text>
+        <Text>Account</Text>
         <Button
-          title="Go to Home"
-          onPress={() => navigation.navigate('Home')}
+          title="Settings"
+          onPress={() => navigation.navigate('Settings')}
         />
-        <Button title="Go back" onPress={() => navigation.goBack()} />
       </View>
     )
   }
@@ -37,4 +29,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default DetailsScreen
+export default AccountScreen

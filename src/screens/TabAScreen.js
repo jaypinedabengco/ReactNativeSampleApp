@@ -2,29 +2,18 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { View, Text, Button, StyleSheet } from 'react-native'
 
-class SettingsScreen extends Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: 'Settings',
-      drawerLabel: 'Settings',
-      headerRight: <Button onPress={navigation.toggleDrawer} title="Menu" />
-    }
-  }
-
+class TabA extends Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired
   }
 
   render() {
     const { navigation } = this.props
-
     return (
       <View style={styles.container}>
-        <Text>Settings</Text>
-        <Button
-          title="Details"
-          onPress={() => navigation.navigate('Details')}
-        />
+        <Text>TabA</Text>
+        <Button title="TabB" onPress={() => navigation.navigate('TabBStack')} />
+        <Button title="TabC" onPress={() => navigation.navigate('TabCStack')} />
       </View>
     )
   }
@@ -38,4 +27,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default SettingsScreen
+export default TabA
