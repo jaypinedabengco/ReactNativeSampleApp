@@ -1,42 +1,27 @@
 import React from 'react'
-import { createStackNavigator } from 'react-navigation'
+import {
+  createStackNavigator,
+  createBottomTabNavigator
+} from 'react-navigation'
 import HomeScreen from './screens/HomeScreen'
 import DetailsScreen from './screens/DetailsScreen'
-import ModalScreen from './screens/ModalScreen'
+import SettingsScreen from './screens/SettingsScreen'
+// import ModalScreen from './screens/ModalScreen'
 
-const MainStack = createStackNavigator(
-  {
-    Home: HomeScreen,
-    Details: DetailsScreen
-  },
-  {
-    initialRouteName: 'Home',
-    navigationOptions: {
-      headerStyle: {
-        backgroundColor: '#f4511e'
-      },
-      headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontWeight: 'bold'
-      }
-    }
-  }
-)
+const HomeStack = createStackNavigator({
+  Home: HomeScreen,
+  Details: DetailsScreen
+})
 
-const RootStack = createStackNavigator(
-  {
-    Main: {
-      screen: MainStack
-    },
-    MyModal: {
-      screen: ModalScreen
-    }
-  },
-  {
-    mode: 'modal',
-    headerMode: 'none'
-  }
-)
+const SettingsStack = createStackNavigator({
+  Settings: SettingsScreen,
+  Details: DetailsScreen
+})
+
+const RootStack = createBottomTabNavigator({
+  Home: HomeStack,
+  Settings: SettingsStack
+})
 
 class App extends React.Component {
   render() {

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { View, Text, Button, StyleSheet } from 'react-native'
 
-class HomeScreen extends Component {
+class SettingsScreen extends Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired
   }
@@ -12,11 +12,7 @@ class HomeScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <Text>Home</Text>
-        <Button
-          title="Settings"
-          onPress={() => navigation.navigate('Settings')}
-        />
+        <Text>Settings</Text>
         <Button
           title="Details"
           onPress={() => navigation.navigate('Details')}
@@ -34,4 +30,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default HomeScreen
+export default SettingsScreen
