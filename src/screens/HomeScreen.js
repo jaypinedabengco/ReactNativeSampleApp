@@ -23,6 +23,10 @@ class HomeScreen extends Component {
         <Text>Home</Text>
         <View>
           <Button
+            title={'View My Facebook Profile'}
+            onPress={() => navigation.navigate('FacebookProfileInfo')}
+          />
+          <Button
             title={`Chat with ${name}`}
             onPress={() => navigation.navigate('Chat', { name: name })}
           />

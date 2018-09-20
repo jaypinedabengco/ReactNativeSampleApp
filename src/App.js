@@ -3,8 +3,13 @@ import HomeScreen from './screens/HomeScreen'
 import LoginScreen from './screens/LoginScreen'
 import ChatScreen from './screens/ChatScreen'
 import AuthLoadingScreen from './screens/AuthLoadingScreen'
+import FacebookUserScreen from './screens/FacebookUserScreen'
 
-const AppStack = createStackNavigator({ Home: HomeScreen, Chat: ChatScreen })
+const AppStack = createStackNavigator({
+  Home: HomeScreen,
+  Chat: ChatScreen,
+  FacebookProfileInfo: FacebookUserScreen
+})
 const AuthStack = createStackNavigator({ LogIn: LoginScreen })
 
 /**

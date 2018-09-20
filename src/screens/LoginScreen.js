@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { View, Text, Button, AsyncStorage, StyleSheet } from 'react-native'
+import { View, AsyncStorage, StyleSheet } from 'react-native'
 import { login } from './../api/LoginAPI'
-import FBLoginButton from './../components/FBLoginButton'
+import FBLoginButton from './../components/CustomFBLoginButton'
 
 class LoginScreen extends Component {
   static navigationOptions = {
@@ -36,8 +36,9 @@ class LoginScreen extends Component {
   /**
    *
    */
-  _onFBLoginSuccess = result => {
-    alert(`Login Succesful ${result.grantedPermissions}`)
+  _onFBLoginSuccess = async token => {
+    await AsyncStorage.setItem('userToken', token)
+    this.props.navigation.navigate('App')
   }
 
   /**
@@ -61,8 +62,6 @@ class LoginScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Login</Text>
-        <Button title="Login" onPress={this._signinAsync} />
         <FBLoginButton
           onSuccess={this._onFBLoginSuccess}
           onCancelled={this._onFBLoginCancelled}

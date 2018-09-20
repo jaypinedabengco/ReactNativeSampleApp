@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { View, StyleSheet } from 'react-native'
-import { LoginButton } from 'react-native-fbsdk'
+import { LoginButton, AccessToken } from 'react-native-fbsdk'
 
 class FBLoginButton extends Component {
   static propTypes = {
@@ -18,7 +18,7 @@ class FBLoginButton extends Component {
   /**
    *
    */
-  _fbLoginFinishedHandler = (error, result) => {
+  _fbLoginFinishedHandler = async (error, result) => {
     const { onSuccess, onCancelled, onError } = this.props
     if (error) {
       return onError(error)
@@ -26,7 +26,8 @@ class FBLoginButton extends Component {
     if (result.isCancelled) {
       return onCancelled('login cancelled')
     }
-    return onSuccess(result)
+    const data = await AccessToken.getCurrentAccessToken()
+    return onSuccess(data.accessToken.toString())
   }
 
   /**
