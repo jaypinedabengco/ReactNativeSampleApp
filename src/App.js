@@ -1,73 +1,23 @@
-import {
-  createStackNavigator,
-  createDrawerNavigator,
-  createBottomTabNavigator,
-  createMaterialTopTabNavigator
-} from 'react-navigation'
+import { createStackNavigator, createSwitchNavigator } from 'react-navigation'
 import HomeScreen from './screens/HomeScreen'
+import LoginScreen from './screens/LoginScreen'
 import ChatScreen from './screens/ChatScreen'
-import AccountScreen from './screens/AccountScreen'
-import TabAScreen from './screens/TabAScreen'
-import TabBScreen from './screens/TabBScreen'
-import TabCScreen from './screens/TabCScreen'
+import AuthLoadingScreen from './screens/AuthLoadingScreen'
 
-const Stacks = createStackNavigator({
-  Home: HomeScreen,
-  Account: AccountScreen,
-  Chat: ChatScreen
-})
+const AppStack = createStackNavigator({ Home: HomeScreen, Chat: ChatScreen })
+const AuthStack = createStackNavigator({ LogIn: LoginScreen })
 
-const Tabs = createBottomTabNavigator(
+/**
+ * Main App
+ */
+const App = createSwitchNavigator(
   {
-    TabA: createStackNavigator({
-      TabAStack: TabAScreen,
-      TabBStack: TabBScreen,
-      TabCStack: TabCScreen
-    }),
-    TabB: TabBScreen,
-    TabC: TabCScreen
+    AuthLoading: AuthLoadingScreen,
+    App: AppStack,
+    Auth: AuthStack
   },
   {
-    animationEnabled: true
-  }
-)
-
-const StacksWithDrawerWithTabs = createStackNavigator({
-  DrawerWithTab: createDrawerNavigator({
-    Home: HomeScreen,
-    Account: AccountScreen,
-    Chat: createMaterialTopTabNavigator({
-      Chat: ChatScreen,
-      TabA: createBottomTabNavigator({
-        TabA: TabAScreen,
-        Home: HomeScreen
-      }),
-      TabC: createBottomTabNavigator({
-        'And now the end is near?': HomeScreen,
-        TabC: TabCScreen,
-        TabB: createDrawerNavigator({
-          'new world?': TabBScreen,
-          yeah: ChatScreen
-        })
-      })
-    })
-  }),
-  TabWithDrawer: createMaterialTopTabNavigator({
-    TabA: createDrawerNavigator({
-      TabA: TabAScreen,
-      Chat: ChatScreen
-    })
-  })
-})
-
-const App = createDrawerNavigator(
-  {
-    Stack: Stacks,
-    Tabs: Tabs,
-    StacksWithDrawerWithTabs: StacksWithDrawerWithTabs
-  },
-  {
-    initialRouteName: 'Stack'
+    initialRouteName: 'AuthLoading'
   }
 )
 

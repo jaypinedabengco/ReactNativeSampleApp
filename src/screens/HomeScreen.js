@@ -1,41 +1,32 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { View, Text, Button, StyleSheet } from 'react-native'
+import { AsyncStorage, View, Text, Button, StyleSheet } from 'react-native'
 
 class HomeScreen extends Component {
   static navigationOptions = {
-    headerStyle: {
-      backgroundColor: '#16a085'
-    },
-    headerTitleStyle: {
-      color: 'white'
-    }
+    title: 'Home'
   }
   static propTypes = {
     navigation: PropTypes.object.isRequired
   }
 
+  _signOutAsync = async () => {
+    await AsyncStorage.clear()
+    this.props.navigation.navigate('Auth')
+  }
+
   render() {
     const { navigation } = this.props
-    const users = [
-      { name: 'Rick' },
-      { name: 'Morty' },
-      { name: 'Summer' },
-      { name: 'Beth' },
-      { name: 'Jerry' }
-    ]
-
+    const name = 'Beth'
     return (
       <View style={styles.container}>
         <Text>Home</Text>
         <View>
-          {users.map((user, i) => (
-            <Button
-              key={i}
-              title={`Chat with ${user.name}`}
-              onPress={() => navigation.navigate('Chat', { name: user.name })}
-            />
-          ))}
+          <Button
+            title={`Chat with ${name}`}
+            onPress={() => navigation.navigate('Chat', { name: name })}
+          />
+          <Button title="logout" onPress={this._signOutAsync} />
         </View>
       </View>
     )
