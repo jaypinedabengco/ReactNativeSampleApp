@@ -10,11 +10,14 @@
     "clean": "watchman watch-del-all && yarn start -- --reset-cache"
   },
   "dependencies": {
+    "adm-zip": "^0.4.11",
+    "plist": "^3.0.1",
     "react": "16.5.0",
     "react-native": "0.57.0",
     "react-native-fbsdk": "^0.8.0",
     "react-navigation": "^2.14.2",
-    "react-navigation-material-bottom-tabs": "^0.4.0"
+    "react-navigation-material-bottom-tabs": "^0.4.0",
+    "xcode": "^1.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
