@@ -19,7 +19,6 @@ class FBLoginButton extends Component {
    *
    */
   _fbLoginFinishedHandler = (error, result) => {
-    console.warn('hey!')
     const { onSuccess, onCancelled, onError } = this.props
     if (error) {
       return onError(error)
@@ -42,7 +41,7 @@ class FBLoginButton extends Component {
     return (
       <View style={styles.container}>
         <LoginButton
-          publishPermissions={fbPublishPermissions}
+          readPermissions={fbPublishPermissions}
           onLoginFinished={this._fbLoginFinishedHandler}
           onLogoutFinished={this._fbLogoutFinishedHandler}
         />

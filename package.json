@@ -12,6 +12,7 @@
   "dependencies": {
     "react": "16.5.0",
     "react-native": "0.57.0",
+    "react-native-fbsdk": "^0.8.0",
     "react-navigation": "^2.14.2",
     "react-navigation-material-bottom-tabs": "^0.4.0"
   },
