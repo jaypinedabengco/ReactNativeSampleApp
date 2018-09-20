@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import FacebookAPI from './../api/FacebookAPI'
 import {
   ActivityIndicator,
   AsyncStorage,
@@ -20,10 +21,15 @@ class AuthLoadingScreen extends Component {
   // Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = async () => {
     const userToken = await AsyncStorage.getItem('userToken')
+    let isLoggedIn = !!userToken
+    // check if logged in via fb
+    if (!isLoggedIn) {
+      isLoggedIn = await FacebookAPI.isLoggedIn()
+    }
 
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
-    this.props.navigation.navigate(userToken ? 'App' : 'Auth')
+    this.props.navigation.navigate(isLoggedIn ? 'App' : 'Auth')
   }
 
   // Render any loading content that you like here

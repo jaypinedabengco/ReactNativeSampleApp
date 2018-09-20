@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { AsyncStorage, View, Text, Button, StyleSheet } from 'react-native'
+import FacebookAPI from './../api/FacebookAPI'
 
 class HomeScreen extends Component {
   static navigationOptions = {
@@ -10,8 +11,24 @@ class HomeScreen extends Component {
     navigation: PropTypes.object.isRequired
   }
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      isFBLogin: false
+    }
+
+    FacebookAPI.isLoggedIn().then(isFBLogin => this.setState({ isFBLogin }))
+  }
+
   _signOutAsync = async () => {
-    await AsyncStorage.clear()
+    // fb logout
+    if (this.state.isFBLogin) {
+      await FacebookAPI.logOut()
+    } else {
+      // normal logout
+      await AsyncStorage.clear()
+    }
+
     this.props.navigation.navigate('Auth')
   }
 

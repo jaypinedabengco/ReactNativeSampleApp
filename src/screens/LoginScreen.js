@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { View, AsyncStorage, StyleSheet } from 'react-native'
+import {
+  View,
+  AsyncStorage,
+  Button,
+  ActivityIndicator,
+  StatusBar,
+  StyleSheet
+} from 'react-native'
 import { login } from './../api/LoginAPI'
 import FBLoginButton from './../components/CustomFBLoginButton'
 
@@ -27,7 +34,9 @@ class LoginScreen extends Component {
       const token = await login('johndoe@yopmail.com', 'hello')
       await AsyncStorage.setItem('userToken', token)
       this.props.navigation.navigate('App')
+      this.setState({ isLoginOngoing: false })
     } catch (errorMessage) {
+      alert(errorMessage)
       this.setState({ loginErrorMessage: errorMessage })
       this.setState({ isLoginOngoing: false })
     }
@@ -36,8 +45,7 @@ class LoginScreen extends Component {
   /**
    *
    */
-  _onFBLoginSuccess = async token => {
-    await AsyncStorage.setItem('userToken', token)
+  _onFBLoginSuccess = async () => {
     this.props.navigation.navigate('App')
   }
 
@@ -60,14 +68,25 @@ class LoginScreen extends Component {
   }
 
   render() {
+    const { isLoginOngoing } = this.state
     return (
       <View style={styles.container}>
-        <FBLoginButton
-          onSuccess={this._onFBLoginSuccess}
-          onCancelled={this._onFBLoginCancelled}
-          onError={this._onFBLoginError}
-          onLogout={this._onFBLogout}
-        />
+        {isLoginOngoing ? (
+          <View>
+            <ActivityIndicator />
+            <StatusBar barStyle="default" />
+          </View>
+        ) : (
+          <View>
+            <Button title="Normal Login" onPress={this._signinAsync} />
+            <FBLoginButton
+              onSuccess={this._onFBLoginSuccess}
+              onCancelled={this._onFBLoginCancelled}
+              onError={this._onFBLoginError}
+              onLogout={this._onFBLogout}
+            />
+          </View>
+        )}
       </View>
     )
   }

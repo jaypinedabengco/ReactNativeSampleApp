@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { AsyncStorage, View, Text, Image, StyleSheet } from 'react-native'
-import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk'
+import FacebookAPI from './../api/FacebookAPI'
 
 class FacebookUserScreen extends Component {
   static navigationOptions = {
@@ -14,35 +14,35 @@ class FacebookUserScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      fbProfileInformation: null
+      fbProfileInformation: null,
+      notLoggedInViaFB: null
     }
-    this._fetchUserInfo()
+
+    this._fetchFacebookUserInformation()
   }
 
-  _fetchUserInfo = async () => {
-    const accessToken = await AsyncStorage.getItem('userToken')
-    const fields = 'first_name, last_name, name, email, picture.type(large)'
+  /**
+   *
+   */
+  _fetchFacebookUserInformation = async () => {
+    const fieldsToFetch =
+      'first_name, last_name, name, email, picture.type(large)'
 
-    const infoRequest = new GraphRequest(
-      '/me',
-      {
-        accessToken: accessToken,
-        parameters: {
-          fields: {
-            string: fields
-          }
-        }
-      },
-      (err, result) => {
-        if (err) {
-          return alert(err)
-        }
-        this.setState({
-          fbProfileInformation: result
-        })
-      }
+    const isLoggedIn = await FacebookAPI.isLoggedIn()
+
+    if (!isLoggedIn) {
+      this.setState({ notLoggedInViaFB: true })
+      return
+    }
+
+    const fbProfileInformation = await FacebookAPI.fetchUserInformation(
+      fieldsToFetch
     )
-    new GraphRequestManager().addRequest(infoRequest).start()
+    // create 'profile_picture_url' field to make it more accessible
+    // on render
+    fbProfileInformation.profile_picture_url =
+      fbProfileInformation.picture.data.url
+    this.setState({ fbProfileInformation: fbProfileInformation })
   }
 
   _responseInfoCallback(error, result) {
@@ -60,7 +60,7 @@ class FacebookUserScreen extends Component {
 
   render() {
     // const { navigation } = this.props
-    const { fbProfileInformation } = this.state
+    const { fbProfileInformation, notLoggedInViaFB } = this.state
     return (
       <View style={styles.container}>
         {fbProfileInformation ? (
@@ -68,13 +68,15 @@ class FacebookUserScreen extends Component {
             <Image
               style={styles.profilePicture}
               source={{
-                uri: fbProfileInformation.picture.data.url
+                uri: fbProfileInformation.profile_picture_url
               }}
             />
             <Text>Firstname : {fbProfileInformation.first_name}</Text>
             <Text>Lastname : {fbProfileInformation.last_name}</Text>
             <Text>Email : {fbProfileInformation.email}</Text>
           </View>
+        ) : notLoggedInViaFB ? (
+          <Text>You are not logged in via FB</Text>
         ) : (
           <Text>Loading...</Text>
         )}
