@@ -1,15 +1,29 @@
 import React, { Component } from 'react'
-import { View, Text, Button, StyleSheet } from 'react-native'
+import { View, Text, Button, Dimensions, StyleSheet } from 'react-native'
 import documentDefinition from './../sample-data/documentDefinition/entry-notice-form-9.json'
-import * as pdfMake from 'pdfmake/build/pdfmake.js'
+import pdfMake from 'pdfmake/build/pdfmake.js'
 import 'pdfmake/build/vfs_fonts'
+import Pdf from 'react-native-pdf'
 
-class SettingsScreen extends Component {
-  async _buildPDF() {
+class PDFMakeDemoScreen extends Component {
+  constructor(prop) {
+    super(prop)
+    this.state = {
+      documentDefinition: documentDefinition,
+      base64Pdf: null
+    }
+  }
+
+  _buildPDF() {
     try {
-      const createdPdf = pdfMake.createPdf(documentDefinition)
+      this.setState({ base64Pdf: null })
+      // clone document definition
+      // & prevent document definition being updated
+      // which causes unexpected document structure
+      const docDef = JSON.parse(JSON.stringify(this.state.documentDefinition))
+      const createdPdf = pdfMake.createPdf(docDef)
       createdPdf.getDataUrl(dataUrl => {
-        console.log(dataUrl)
+        this.setState({ base64Pdf: dataUrl })
       })
     } catch (err) {
       alert(err)
@@ -17,10 +31,21 @@ class SettingsScreen extends Component {
   }
 
   render() {
+    const source = { uri: this.state.base64Pdf }
     return (
       <View style={styles.container}>
         <Text>PDFMake Demo</Text>
-        <Button title="build pdf" onPress={this._buildPDF} />
+        {this.state.base64Pdf === null ? (
+          <Button title="build pdf" onPress={() => this._buildPDF()} />
+        ) : (
+          <View>
+            <Button
+              title="close pdf"
+              onPress={() => this.setState({ base64Pdf: null })}
+            />
+            <Pdf style={styles.pdf} source={source} />
+          </View>
+        )}
       </View>
     )
   }
@@ -31,7 +56,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  pdf: {
+    flex: 1,
+    width: Dimensions.get('screen').width
   }
 })
 
-export default SettingsScreen
+export default PDFMakeDemoScreen

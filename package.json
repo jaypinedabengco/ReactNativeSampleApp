@@ -16,8 +16,10 @@
     "react": "16.5.0",
     "react-native": "0.57.0",
     "react-native-fbsdk": "^0.8.0",
+    "react-native-pdf": "^5.0.5",
     "react-navigation": "^2.14.2",
     "react-navigation-material-bottom-tabs": "^0.4.0",
+    "rn-fetch-blob": "^0.10.13",
     "xcode": "^1.0.0"
   },
   "devDependencies": {
