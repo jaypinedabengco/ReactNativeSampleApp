@@ -4,11 +4,13 @@ import LoginScreen from './screens/LoginScreen'
 import ChatScreen from './screens/ChatScreen'
 import AuthLoadingScreen from './screens/AuthLoadingScreen'
 import FacebookUserScreen from './screens/FacebookUserScreen'
+import PDFMakeDemoScreen from './screens/PDFMakeDemoScreen'
 
 const AppStack = createStackNavigator({
   Home: HomeScreen,
   Chat: ChatScreen,
-  FacebookProfileInfo: FacebookUserScreen
+  FacebookProfileInfo: FacebookUserScreen,
+  PDFMakeDemo: PDFMakeDemoScreen
 })
 const AuthStack = createStackNavigator({ LogIn: LoginScreen })
 

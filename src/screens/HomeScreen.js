@@ -40,6 +40,10 @@ class HomeScreen extends Component {
         <Text>Home</Text>
         <View>
           <Button
+            title={'PDF Make Demo'}
+            onPress={() => navigation.navigate('PDFMakeDemo')}
+          />
+          <Button
             title={'View My Facebook Profile'}
             onPress={() => navigation.navigate('FacebookProfileInfo')}
           />
