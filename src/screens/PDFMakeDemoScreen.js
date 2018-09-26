@@ -5,6 +5,7 @@ import pdfMake from 'pdfmake/build/pdfmake.js'
 import 'pdfmake/build/vfs_fonts'
 import Pdf from 'react-native-pdf'
 import SignatureCapture from 'react-native-signature-capture'
+import FormBuilderService from './../services/FormBuilderService'
 class PDFMakeDemoScreen extends Component {
   constructor(prop) {
     super(prop)
@@ -15,13 +16,22 @@ class PDFMakeDemoScreen extends Component {
     }
   }
 
-  _buildPDF() {
+  async _buildPDF() {
     try {
       this.setState({ base64Pdf: null })
       // clone document definition
       // & prevent document definition being updated
       // which causes unexpected document structure
       const docDef = JSON.parse(JSON.stringify(this.state.documentDefinition))
+
+      // if has signature, then add to documentDefinition
+      if (this.state.savedSignature) {
+        await this._addSignatureToDocumentDefinition(
+          docDef,
+          this.state.savedSignature
+        )
+      }
+
       const createdPdf = pdfMake.createPdf(docDef)
       createdPdf.getDataUrl(dataUrl => {
         this.setState({ base64Pdf: dataUrl })
@@ -34,6 +44,44 @@ class PDFMakeDemoScreen extends Component {
   _onSaveSignatureEvent(result) {
     // save base64 image
     this.setState({ savedSignature: `data:image/png;base64,${result.encoded}` })
+  }
+
+  /**
+   *
+   * @param {*} documentDefinition
+   */
+  async _addSignatureToDocumentDefinition(documentDefinition, signature) {
+    try {
+      // mock formDefinitionContent container for signatures
+      const signatureFormContent = {
+        ref_id: 'random-ref-id-1.7.2',
+        type: 'digital-signature',
+        value: signature
+      }
+
+      const documentDefinitionContainers = await FormBuilderService.getAllDocumentDefinitionObjectWithReferenceIds(
+        documentDefinition
+      )
+
+      const documentDefinitionContainer = documentDefinitionContainers.find(
+        element => element.ref_id === signatureFormContent.ref_id
+      )
+
+      if (!documentDefinitionContainer) {
+        throw 'DocumentDefinition field for signature not found'
+      }
+
+      // if still text, then remove this (workaround)
+      if (documentDefinitionContainer.text !== undefined) {
+        delete documentDefinitionContainer.text
+      }
+
+      documentDefinitionContainer.image = signatureFormContent.value
+
+      return documentDefinition
+    } catch (error) {
+      throw error
+    }
   }
 
   render() {
@@ -87,14 +135,14 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width
   },
   preview: {
-    flex: 2
+    flex: 2,
+    width: Dimensions.get('screen').width
   },
   signature: {
     flex: 1
   },
   previewSignature: {
-    flex: 1,
-    alignItems: 'center'
+    flex: 1
   }
 })
 
